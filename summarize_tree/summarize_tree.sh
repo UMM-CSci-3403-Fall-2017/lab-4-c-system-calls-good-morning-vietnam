@@ -1,9 +1,13 @@
-#!/usr/bin/env bash
+#!/bin/bash
 
-start_dir=$1
+if [ $# -ne 1 ] ; then
+	echo "summarize_tree.sh requires one parameter"
+	exit
+fi
 
-num_files=`find $start_dir -type f | wc -l`
-num_dirs=`find $start_dir -type d | wc -l`
+DIR="$1"
+NUM_DIRS=`find $DIR -type d | wc -l`
+NUM_FILES=`find $DIR -type f | wc -l`
 
-echo "There were $num_dirs directories."
-echo "There were $num_files regular files."
+echo "There were $NUM_DIRS directories."
+echo "There were $NUM_FILES regular files."
