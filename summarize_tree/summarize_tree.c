@@ -9,6 +9,10 @@
 static int num_dirs, num_regular;
 
 bool is_dir(const char* path) {
+  struct stat buf;
+  int s = stat(path, &buf);
+
+  return (s == 0 && S_ISDIR(buf.st_mode));
   /*
    * Use the stat() function (try "man 2 stat") to determine if the file
    * referenced by path is a directory or not.  Call stat, and then use
@@ -25,6 +29,22 @@ bool is_dir(const char* path) {
 void process_path(const char*);
 
 void process_directory(const char* path) {
+  num_dirs++;
+
+  DIR *dir;
+  struct dirent *dp;
+  dir = opendir(path);
+
+  chdir(path);
+
+  while((dp = readdir(dir)) != NULL) {
+    if (strcmp(dp->d_name, ".") && strcmp(dp->d_name, "..")) {
+      process_path(dp->d_name);
+    }
+  }
+
+  closedir(dir);
+  chdir("..");
   /*
    * Update the number of directories seen, use opendir() to open the
    * directory, and then use readdir() to loop through the entries
@@ -39,6 +59,9 @@ void process_directory(const char* path) {
 }
 
 void process_file(const char* path) {
+
+  num_regular++;
+
   /*
    * Update the number of regular files.
    */
