@@ -1,13 +1,10 @@
 #!/bin/bash
 
-if [ $# -ne 1 ] ; then
-	echo "summarize_tree.sh requires one parameter"
-	exit
-fi
+# used find to count the number of directories
+num_dirs=$(find -L $1 -type d | wc -l)
 
-DIR="$1"
-NUM_DIRS=`find $DIR -type d | wc -l`
-NUM_FILES=`find $DIR -type f | wc -l`
+# used find to count the number of regular files
+num_regs=$(find -L $1 -type f | wc -l)
 
-echo "There were $NUM_DIRS directories."
-echo "There were $NUM_FILES regular files."
+echo "There were $num_dirs directories."
+echo "There were $num_regs regular files."
